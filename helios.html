@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Helios — by Irrigant</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0F1B2D;--deep:#1A3A5C;--teal:#0D7377;--green:#2D8F4E;
+  --gold:#D4A843;--cream:#FAFAF5;--sand:#F5F0E8;--white:#FFFFFF;
+  --ltblue:#E8F4F8;--gray:#6B7B8D;--ltgray:#D0D8E0;
+  --dark:#1A1A2E;--body:#3A3A4A;--medblu:#3A7CA5;
+}
+body{min-height:100vh;background:var(--cream);font-family:'DM Sans','Segoe UI',sans-serif;color:var(--dark)}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:#c4c4c4;border-radius:3px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp .4s ease both}
+
+/* Header */
+header{background:linear-gradient(135deg,var(--navy),var(--deep));padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:14px}
+.logo-circle{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--green));display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff}
+.logo-text{font-size:17px;font-weight:700;color:#fff;letter-spacing:1.5px;font-family:'DM Mono',monospace}
+.logo-sub{font-size:10px;color:var(--gold);letter-spacing:2px;font-weight:500}
+.tabs{display:flex;gap:6px}
+.tab{padding:8px 18px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--gray);transition:all .15s;font-family:inherit}
+.tab.active{background:var(--teal);color:#fff}
+.tab:hover:not(.active){background:rgba(255,255,255,.1)}
+
+/* Field bar */
+.field-bar{padding:10px 24px;background:#efebe3;display:flex;align-items:center;gap:8px;overflow-x:auto;border-bottom:1px solid #ddd8ce}
+.field-btn{border:none;cursor:pointer;border-radius:8px;padding:6px 16px;font-size:12px;font-weight:600;font-family:inherit;transition:all .15s}
+.field-btn:hover{transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.field-btn.active{background:var(--navy);color:#fff}
+.field-btn.inactive{background:#fff;color:var(--body);border:1px solid #ccc}
+.field-btn.add{background:var(--teal);color:#fff}
+
+/* Layout */
+.container{max-width:1100px;margin:0 auto;padding:20px 20px 40px}
+.grid{display:grid;gap:16px}
+.grid-2{grid-template-columns:1fr 1fr}
+.grid-full{grid-column:1/-1}
+.card{background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 12px rgba(0,0,0,.04)}
+
+/* Rec card */
+.rec-header{padding:20px 28px;display:flex;align-items:center;justify-content:space-between;border-radius:12px 12px 0 0}
+.rec-header.water{background:linear-gradient(135deg,var(--teal),var(--green))}
+.rec-header.wait{background:linear-gradient(135deg,var(--deep),var(--medblu))}
+.rec-label{font-size:11px;color:rgba(255,255,255,.7);letter-spacing:2px;font-weight:600;font-family:'DM Mono',monospace;margin-bottom:4px}
+.rec-action{font-size:42px;font-weight:700;color:#fff;letter-spacing:2px}
+.rec-conf-num{font-size:36px;font-weight:700;color:#fff}
+.rec-conf-label{font-size:12px;color:rgba(255,255,255,.8)}
+.rec-details{padding:18px 28px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+.rec-detail-label{font-size:11px;color:var(--gray);font-weight:600;letter-spacing:1px;margin-bottom:4px}
+.rec-detail-value{font-size:20px;font-weight:700;color:var(--dark)}
+.rec-detail-value.sm{font-size:14px;font-weight:600}
+.rec-why{padding:0 28px 18px;font-size:13px;color:#555;line-height:1.6;border-top:1px solid #f0ece4;padding-top:14px}
+.rec-why b{color:var(--teal)}
+
+/* Weather */
+.section-header{font-size:13px;font-weight:700;color:var(--gray);letter-spacing:1px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+.wx-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.wx-cell{background:#f9f7f3;border-radius:8px;padding:10px 12px}
+.wx-label{font-size:10px;color:#999;font-weight:600;letter-spacing:.5px}
+.wx-val{font-size:20px;font-weight:700;color:var(--dark);margin-top:2px}
+.wx-sub{font-size:11px;color:#888}
+.et-bar{margin-top:12px;background:#f9f7f3;border-radius:8px;padding:10px 12px}
+.et-val{font-size:18px;font-weight:700;color:var(--teal)}
+.et-sub{font-size:13px;color:#888;margin-left:12px}
+
+/* Soil */
+.sm-big{font-size:36px;font-weight:700;color:var(--teal)}
+.sm-label{font-size:11px;color:#888}
+.sm-bar-track{height:8px;background:#eee;border-radius:4px;overflow:hidden;position:relative}
+.sm-bar-fill{height:100%;border-radius:4px;transition:width .5s ease}
+.sm-bar-labels{display:flex;justify-content:space-between;font-size:9px;color:#999;margin-top:2px}
+.sm-stats{display:flex;gap:10px;margin-top:12px}
+.sm-stat{background:#f9f7f3;border-radius:8px;padding:8px 12px;flex:1}
+.sm-stat-label{font-size:10px;color:#999;font-weight:600}
+.sm-stat-val{font-size:18px;font-weight:700}
+.slider{width:100%;border:none;padding:0;margin-top:4px;accent-color:var(--teal)}
+
+/* Config */
+.config-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.config-cell{background:#f9f7f3;border-radius:8px;padding:8px 10px}
+.config-cell-label{font-size:9px;color:#999;font-weight:600;letter-spacing:.5px}
+.config-cell-val{font-size:13px;font-weight:600;color:var(--dark);text-transform:capitalize;margin-top:2px}
+.edit-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.edit-label{font-size:11px;color:#888;font-weight:600;display:block;margin-bottom:4px}
+select,input[type="text"],input[type="number"]{font-family:inherit;border:1.5px solid #ddd;border-radius:8px;padding:8px 12px;font-size:13px;background:#fff;transition:border-color .15s;outline:none;width:100%}
+select:focus,input:focus{border-color:var(--teal)}
+
+/* Btn */
+.btn{border:none;cursor:pointer;border-radius:8px;font-family:inherit;font-weight:600;transition:all .15s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.btn-sm{padding:4px 12px;font-size:11px}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-light{background:#f0ece4;color:#555}
+.btn-dark{background:var(--navy);color:#fff}
+.btn-danger{background:#fee;color:#c44}
+
+/* History table */
+.hist-table{width:100%;border-collapse:collapse;font-size:13px}
+.hist-table th{padding:10px 14px;text-align:left;font-size:11px;color:#999;font-weight:700;letter-spacing:.5px;border-bottom:2px solid #e8e4dc}
+.hist-table td{padding:10px 14px;border-bottom:1px solid #f0ece4}
+.badge{display:inline-block;padding:3px 12px;border-radius:12px;font-size:11px;font-weight:700}
+.badge-water{background:#e0f5f0;color:var(--teal)}
+.badge-wait{background:#eef2f7;color:var(--medblu)}
+.conf-bar{width:50px;height:6px;background:#eee;border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:8px}
+.conf-fill{height:100%;border-radius:3px}
+.hist-note{margin-top:16px;padding:14px;background:#f9f7f3;border-radius:8px;font-size:12px;color:#666}
+.hist-note b{color:var(--teal)}
+
+/* Fields overview */
+.field-card{padding:20px;cursor:pointer;border:2px solid transparent;transition:border-color .15s}
+.field-card.selected{border-color:var(--teal)}
+.field-card-header{display:flex;justify-content:space-between;align-items:start}
+.field-card-name{font-size:15px;font-weight:700;color:var(--dark)}
+.field-card-meta{font-size:12px;color:#888;margin-top:2px}
+.field-card-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px}
+.field-stat{background:#f9f7f3;border-radius:6px;padding:6px 8px}
+.field-stat-label{font-size:9px;color:#999}
+.field-stat-val{font-size:16px;font-weight:700}
+
+/* SVG sparkline */
+svg.spark{display:block;margin-top:4px}
+
+@media(max-width:768px){
+  .grid-2{grid-template-columns:1fr}
+  .config-grid{grid-template-columns:repeat(3,1fr)}
+  .edit-grid{grid-template-columns:1fr 1fr}
+  .rec-details{grid-template-columns:1fr}
+  .field-card-stats{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-circle">💧</div>
+    <div>
+      <div class="logo-text">HELIOS</div>
+      <div class="logo-sub">BY IRRIGANT</div>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" data-view="dashboard">Dashboard</button>
+    <button class="tab" data-view="history">History</button>
+    <button class="tab" data-view="fields">Fields</button>
+  </div>
+</header>
+
+<div class="field-bar" id="fieldBar"></div>
+<div class="container" id="app"></div>
+
+<script>
+// ─── AGRONOMIC DATA ───
+const CROPS = {
+  potatoes:{kc:[.5,1.15,.75],stages:["Establishment","Tuber Init.","Maturation"],stressLow:.35,rootDepth:.6},
+  wheat:{kc:[.3,1.15,.25],stages:["Tillering","Heading","Ripening"],stressLow:.30,rootDepth:1.2},
+  alfalfa:{kc:[.4,1.2,1.15],stages:["Green-up","Peak Growth","Late Cut"],stressLow:.40,rootDepth:1.5},
+  sugarbeets:{kc:[.35,1.2,.7],stages:["Emergence","Canopy Close","Sugar Accum."],stressLow:.35,rootDepth:1.0},
+  corn:{kc:[.3,1.2,.6],stages:["Vegetative","Tasseling","Grain Fill"],stressLow:.32,rootDepth:1.0},
+  barley:{kc:[.3,1.15,.25],stages:["Tillering","Heading","Ripening"],stressLow:.30,rootDepth:1.0},
+};
+const SOILS = {
+  sandy:{fc:.15,wp:.06,label:"Sandy"},
+  "sandy-loam":{fc:.22,wp:.09,label:"Sandy Loam"},
+  loam:{fc:.27,wp:.12,label:"Loam"},
+  "clay-loam":{fc:.32,wp:.15,label:"Clay Loam"},
+  clay:{fc:.38,wp:.20,label:"Clay"},
+};
+const IRR_TYPES = {
+  pivot:{eff:.85,label:"Center Pivot",maxRate:1.2},
+  drip:{eff:.92,label:"Drip/Micro",maxRate:.5},
+  flood:{eff:.60,label:"Flood/Furrow",maxRate:3.0},
+  sprinkler:{eff:.78,label:"Sprinkler",maxRate:1.0},
+};
+
+// ─── FAO-56 ENGINE ───
+function computeET0(t,h,w,s){
+  const sat=.6108*Math.exp(17.27*t/(t+237.3)),act=sat*(h/100),vpd=sat-act;
+  const delta=4098*sat/Math.pow(t+237.3,2),gamma=.065;
+  const Rn=s*.77-2,et0=(.408*delta*Rn+gamma*(900/(t+273))*w*vpd)/(delta+gamma*(1+.34*w));
+  return Math.max(.5,Math.min(et0,12));
+}
+
+function runHelios(field,weather){
+  const crop=CROPS[field.crop],soil=SOILS[field.soil],irr=IRR_TYPES[field.irrigationType];
+  const si=Math.min(field.growthStage,2),kc=crop.kc[si];
+  const et0=computeET0(weather.temp,weather.humidity,weather.wind,weather.solar);
+  const etc=et0*kc,taw=(soil.fc-soil.wp)*crop.rootDepth*1000,raw=taw*.55;
+  const curSM=field.soilMoisture/100,curDep=(soil.fc-curSM)*crop.rootDepth*1000;
+  const depRate=etc,daysToStress=Math.max(0,(raw-curDep)/depRate);
+  const precip=weather.precipProb>60?(weather.precipAmount||3):0,effPrecip=precip*.8;
+  const netNeed=Math.max(0,(raw-curDep+etc*2)-effPrecip);
+  const grossIn=netNeed/irr.eff/25.4;
+  const shouldWater=daysToStress<2&&grossIn>.15&&weather.precipProb<65;
+  const conf=Math.min(95,Math.max(55,85-(weather.precipProb>40?15:0)+(field.soilMoisture<30?10:0)-(Math.abs(weather.temp-25)>15?8:0)+(field.sensorCount>2?5:0)));
+  let timing="Tonight 8 PM – Tomorrow 6 AM";
+  if(weather.wind>15)timing="Tomorrow early AM (low wind)";
+  if(weather.temp>35)timing="Tonight after 9 PM (cool)";
+  if(field.energyTOU==="off-peak-night")timing="Tonight 10 PM – 5 AM (off-peak)";
+  const aLow=Math.max(.2,grossIn*.85),aHigh=Math.max(.3,grossIn*1.15);
+  const proj=[];let sm=curSM*100;
+  for(let h=0;h<72;h++){
+    const loss=etc/24*(.7+.6*Math.sin((h%24)*Math.PI/12));
+    sm-=loss*.4;
+    if(shouldWater&&h===20)sm+=grossIn*25.4*irr.eff*.1;
+    sm=Math.max(soil.wp*100,Math.min(soil.fc*100,sm));
+    proj.push({hour:h,moisture:sm});
+  }
+  const stressT=crop.stressLow*100+5;
+  let explanation="";
+  if(shouldWater){
+    explanation=`Soil moisture at ${field.soilMoisture}% is trending toward the ${crop.stages[si].toLowerCase()} stress threshold of ~${stressT.toFixed(0)}%. At current ET rates (${etc.toFixed(1)} mm/day), depletion will reach critical levels in ~${daysToStress.toFixed(1)} days.`;
+    if(effPrecip>0)explanation+=` Forecast precipitation (${weather.precipProb}% chance) is insufficient to meet crop demand.`;
+    if(field.energyTOU==="off-peak-night")explanation+=` Timing optimized for off-peak energy rates.`;
+  } else {
+    if(weather.precipProb>=65)explanation=`Rain likely (${weather.precipProb}% probability). Recommend waiting to avoid overwatering.`;
+    else if(daysToStress>=2)explanation=`Soil moisture is adequate for the next ${daysToStress.toFixed(1)} days given current conditions and crop demand.`;
+    else explanation=`Current moisture levels are sufficient. Next check recommended in 12-24 hours.`;
+  }
+  return {action:shouldWater?"WATER":"WAIT",amountLow:aLow.toFixed(2),amountHigh:aHigh.toFixed(2),timingWindow:timing,confidence:Math.round(conf),explanation,et0:et0.toFixed(1),etc:etc.toFixed(1),daysToStress:daysToStress.toFixed(1),stressThreshold:stressT.toFixed(0),smProjection:proj,cropStage:crop.stages[si],depletionRate:depRate.toFixed(1)};
+}
+
+// ─── WEATHER SIM ───
+function genWeather(seed){
+  const s=seed||Date.now(),r=(a,b)=>a+((Math.sin(s*9301+49297)%1+1)%1)*(b-a);
+  const hr=new Date().getHours(),baseT=22+10*Math.sin((hr-6)*Math.PI/12);
+  return {temp:Math.round(baseT+r(-3,3)),humidity:Math.round(35+r(0,30)),wind:Math.round(5+r(0,15)),solar:Math.round(Math.max(0,18+8*Math.sin((hr-6)*Math.PI/12))),precipProb:Math.round(r(5,45)),precipAmount:Math.round(r(0,8)),condition:hr>6&&hr<20?"Partly Cloudy":"Clear",tempHigh:Math.round(baseT+8),tempLow:Math.round(baseT-10)};
+}
+
+function genHistory(){
+  const h=[];const today=new Date();
+  for(let i=14;i>=1;i--){
+    const d=new Date(today);d.setDate(d.getDate()-i);
+    const act=Math.random()>.45?"WATER":"WAIT";
+    h.push({date:d.toLocaleDateString("en-US",{month:"short",day:"numeric"}),action:act,amount:act==="WATER"?(0.4+Math.random()*.8).toFixed(1):"—",confidence:Math.round(65+Math.random()*30),soilMoisture:Math.round(25+Math.random()*35)});
+  }
+  return h;
+}
+
+// ─── STATE ───
+let fields=[
+  {id:1,name:"North Pivot — Section A",crop:"potatoes",growthStage:1,soil:"sandy-loam",irrigationType:"pivot",soilMoisture:38,sensorCount:3,slope:"flat",pumpCapacity:800,waterRights:"8 hrs/day",energyTOU:"off-peak-night",acres:125},
+  {id:2,name:"South Drip — Beets",crop:"sugarbeets",growthStage:1,soil:"loam",irrigationType:"drip",soilMoisture:29,sensorCount:2,slope:"gentle",pumpCapacity:400,waterRights:"6 hrs/day",energyTOU:"standard",acres:40},
+];
+let activeFieldId=1;
+let currentView="dashboard";
+let showEditor=false;
+
+function activeField(){return fields.find(f=>f.id===activeFieldId)||fields[0]}
+
+// ─── SPARKLINE SVG ───
+function sparkSVG(data,threshold,w=280,h=55){
+  if(!data||!data.length)return"";
+  const vals=data.map(d=>d.moisture),mn=Math.min(...vals)-2,mx=Math.max(...vals)+2,rng=mx-mn||1;
+  const pts=vals.map((v,i)=>`${(i/(vals.length-1))*w},${h-((v-mn)/rng)*h}`).join(" ");
+  let thLine="";
+  if(threshold!=null){
+    const ty=h-((threshold-mn)/rng)*h;
+    thLine=`<line x1="0" y1="${ty}" x2="${w}" y2="${ty}" stroke="#e74c3c" stroke-width="1" stroke-dasharray="4,3" opacity=".6"/><text x="${w-2}" y="${ty-3}" fill="#e74c3c" font-size="8" text-anchor="end" opacity=".7">stress</text>`;
+  }
+  const lastY=h-((vals[vals.length-1]-mn)/rng)*h;
+  return `<svg class="spark" width="${w}" height="${h}">${thLine}<polyline points="${pts}" fill="none" stroke="var(--teal)" stroke-width="2"/><circle cx="${w}" cy="${lastY}" r="3" fill="var(--teal)"/></svg>`;
+}
+
+// ─── RENDER ───
+function render(){
+  const af=activeField();
+  const weather=genWeather(af.id*1000+Date.now()%10000);
+  const rec=runHelios(af,weather);
+  const history=genHistory();
+
+  // Field bar
+  document.getElementById("fieldBar").innerHTML=fields.map(f=>`<button class="field-btn ${f.id===activeFieldId?"active":"inactive"}" onclick="setField(${f.id})">${f.name}</button>`).join("")+`<button class="field-btn add" onclick="addField()">+ Add Field</button>`;
+
+  // Tabs
+  document.querySelectorAll(".tab").forEach(t=>{t.classList.toggle("active",t.dataset.view===currentView);t.onclick=()=>{currentView=t.dataset.view;render();}});
+
+  const app=document.getElementById("app");
+
+  if(currentView==="dashboard"){
+    const soil=SOILS[af.soil];
+    const smPct=Math.min(100,(af.soilMoisture/(soil.fc*100))*100);
+    const smColor=af.soilMoisture<25?"#e74c3c":af.soilMoisture<35?"var(--gold)":"var(--green)";
+    const stressColor=parseFloat(rec.daysToStress)<2?"#e74c3c":"var(--green)";
+
+    app.innerHTML=`<div class="grid grid-2 fade-up">
+      <!-- REC CARD -->
+      <div class="card grid-full">
+        <div class="rec-header ${rec.action==="WATER"?"water":"wait"}">
+          <div><div class="rec-label">HELIOS RECOMMENDATION</div><div class="rec-action">${rec.action}</div></div>
+          <div style="text-align:right"><div class="rec-conf-num">${rec.confidence}%</div><div class="rec-conf-label">confidence</div></div>
+        </div>
+        <div class="rec-details">
+          <div><div class="rec-detail-label">AMOUNT</div><div class="rec-detail-value">${rec.action==="WATER"?rec.amountLow+" – "+rec.amountHigh+'"':"—"}</div></div>
+          <div><div class="rec-detail-label">TIMING</div><div class="rec-detail-value sm">${rec.action==="WATER"?rec.timingWindow:"Check in 12–24 hrs"}</div></div>
+          <div><div class="rec-detail-label">STAGE</div><div class="rec-detail-value sm">${rec.cropStage}</div></div>
+        </div>
+        <div class="rec-why"><b>Why: </b>${rec.explanation}</div>
+      </div>
+
+      <!-- WEATHER -->
+      <div class="card" style="padding:20px">
+        <div class="section-header">WEATHER <button class="btn btn-sm btn-light" onclick="render()">↻ Refresh</button></div>
+        <div class="wx-grid">
+          <div class="wx-cell"><div class="wx-label">Temperature</div><div class="wx-val">${weather.temp}°C</div><div class="wx-sub">H: ${weather.tempHigh}° L: ${weather.tempLow}°</div></div>
+          <div class="wx-cell"><div class="wx-label">Humidity</div><div class="wx-val">${weather.humidity}%</div><div class="wx-sub">${weather.condition}</div></div>
+          <div class="wx-cell"><div class="wx-label">Wind</div><div class="wx-val">${weather.wind} km/h</div><div class="wx-sub">${weather.wind>15?"⚠ High":"Moderate"}</div></div>
+          <div class="wx-cell"><div class="wx-label">Rain Prob.</div><div class="wx-val">${weather.precipProb}%</div><div class="wx-sub">~${weather.precipAmount}mm</div></div>
+        </div>
+        <div class="et-bar"><div class="wx-label">EVAPOTRANSPIRATION</div><span class="et-val">ET₀ ${rec.et0} mm/day</span><span class="et-sub">ETc ${rec.etc} mm/day</span></div>
+      </div>
+
+      <!-- SOIL MOISTURE -->
+      <div class="card" style="padding:20px">
+        <div class="section-header">SOIL MOISTURE — 72 HR FORECAST</div>
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px">
+          <div><div class="sm-big">${af.soilMoisture}%</div><div class="sm-label">Current</div></div>
+          <div style="flex:1">
+            <div class="sm-bar-track"><div class="sm-bar-fill" style="width:${smPct}%;background:${smColor}"></div></div>
+            <div class="sm-bar-labels"><span>Wilting</span><span>Field Capacity</span></div>
+          </div>
+        </div>
+        ${sparkSVG(rec.smProjection,parseFloat(rec.stressThreshold))}
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:#999;margin-top:4px"><span>Now</span><span>+24h</span><span>+48h</span><span>+72h</span></div>
+        <div class="sm-stats">
+          <div class="sm-stat"><div class="sm-stat-label">DAYS TO STRESS</div><div class="sm-stat-val" style="color:${stressColor}">${rec.daysToStress}</div></div>
+          <div class="sm-stat"><div class="sm-stat-label">DEPLETION</div><div class="sm-stat-val">${rec.depletionRate} mm/d</div></div>
+        </div>
+        <div style="margin-top:12px"><label style="font-size:11px;color:#888;font-weight:600">Adjust sensor reading (%)</label><input type="range" class="slider" min="10" max="55" value="${af.soilMoisture}" oninput="updateField('soilMoisture',parseInt(this.value))"></div>
+      </div>
+
+      <!-- FIELD CONFIG -->
+      <div class="card grid-full" style="padding:20px">
+        <div class="section-header">${af.name.toUpperCase()} — CONFIGURATION <button class="btn btn-sm ${showEditor?"btn-dark":"btn-light"}" onclick="toggleEditor()">${showEditor?"Collapse":"Edit"}</button></div>
+        ${showEditor?renderEditor(af):renderConfigSummary(af)}
+      </div>
+    </div>`;
+  }
+
+  else if(currentView==="history"){
+    app.innerHTML=`<div class="fade-up"><div class="card" style="padding:20px">
+      <div class="section-header">RECOMMENDATION HISTORY — ${af.name.toUpperCase()}</div>
+      <div style="overflow-x:auto"><table class="hist-table"><thead><tr><th>Date</th><th>Action</th><th>Amount (in)</th><th>Confidence</th><th>Soil Moisture</th></tr></thead><tbody>
+      ${history.map(h=>{
+        const cColor=h.confidence>80?"var(--green)":h.confidence>65?"var(--gold)":"#e74c3c";
+        return `<tr><td style="font-weight:500">${h.date}</td><td><span class="badge ${h.action==="WATER"?"badge-water":"badge-wait"}">${h.action}</span></td><td style="font-weight:600">${h.amount}</td><td><span class="conf-bar"><span class="conf-fill" style="width:${h.confidence}%;background:${cColor}"></span></span><span style="font-size:12px;font-weight:600">${h.confidence}%</span></td><td style="font-weight:500">${h.soilMoisture}%</td></tr>`;
+      }).join("")}
+      </tbody></table></div>
+      <div class="hist-note"><b>Calibration Status:</b> Helios has compared predicted vs. observed moisture across ${history.filter(h=>h.action==="WATER").length} irrigation events. Model accuracy is improving with each cycle.</div>
+    </div></div>`;
+  }
+
+  else if(currentView==="fields"){
+    app.innerHTML=`<div class="grid grid-2 fade-up">${fields.map(f=>{
+      const w=genWeather(f.id*1000);const r=runHelios(f,w);
+      const stCol=parseFloat(r.daysToStress)<2?"#e74c3c":"var(--green)";
+      return `<div class="card field-card ${f.id===activeFieldId?"selected":""}" onclick="setField(${f.id});setView('dashboard')">
+        <div class="field-card-header"><div><div class="field-card-name">${f.name}</div><div class="field-card-meta">${f.acres} acres · ${f.crop} · ${CROPS[f.crop].stages[f.growthStage]}</div></div><span class="badge ${r.action==="WATER"?"badge-water":"badge-wait"}">${r.action}</span></div>
+        <div class="field-card-stats">
+          <div class="field-stat"><div class="field-stat-label">Moisture</div><div class="field-stat-val" style="color:var(--teal)">${f.soilMoisture}%</div></div>
+          <div class="field-stat"><div class="field-stat-label">Confidence</div><div class="field-stat-val">${r.confidence}%</div></div>
+          <div class="field-stat"><div class="field-stat-label">Stress in</div><div class="field-stat-val" style="color:${stCol}">${r.daysToStress}d</div></div>
+        </div>
+        ${fields.length>1?`<button class="btn btn-sm btn-danger" style="margin-top:10px" onclick="event.stopPropagation();removeField(${f.id})">Remove</button>`:""}
+      </div>`;
+    }).join("")}</div>`;
+  }
+}
+
+function renderConfigSummary(af){
+  return `<div class="config-grid">
+    ${[["Crop",af.crop],["Stage",CROPS[af.crop].stages[af.growthStage]],["Soil",SOILS[af.soil].label],["System",IRR_TYPES[af.irrigationType].label],["Sensors",af.sensorCount],["Acres",af.acres]].map(([l,v])=>`<div class="config-cell"><div class="config-cell-label">${l}</div><div class="config-cell-val">${v}</div></div>`).join("")}
+  </div>`;
+}
+
+function renderEditor(af){
+  return `<div class="edit-grid">
+    <div><label class="edit-label">Field Name</label><input type="text" value="${af.name}" onchange="updateField('name',this.value)"></div>
+    <div><label class="edit-label">Crop</label><select onchange="updateField('crop',this.value)">${Object.keys(CROPS).map(c=>`<option value="${c}" ${af.crop===c?"selected":""}>${c.charAt(0).toUpperCase()+c.slice(1)}</option>`).join("")}</select></div>
+    <div><label class="edit-label">Growth Stage</label><select onchange="updateField('growthStage',parseInt(this.value))">${CROPS[af.crop].stages.map((s,i)=>`<option value="${i}" ${af.growthStage===i?"selected":""}>${s}</option>`).join("")}</select></div>
+    <div><label class="edit-label">Soil Type</label><select onchange="updateField('soil',this.value)">${Object.entries(SOILS).map(([k,v])=>`<option value="${k}" ${af.soil===k?"selected":""}>${v.label}</option>`).join("")}</select></div>
+    <div><label class="edit-label">Irrigation System</label><select onchange="updateField('irrigationType',this.value)">${Object.entries(IRR_TYPES).map(([k,v])=>`<option value="${k}" ${af.irrigationType===k?"selected":""}>${v.label}</option>`).join("")}</select></div>
+    <div><label class="edit-label">Energy Schedule</label><select onchange="updateField('energyTOU',this.value)">${["off-peak-night","standard","peak-avoid"].map(e=>`<option value="${e}" ${af.energyTOU===e?"selected":""}>${e.replace(/-/g," ").replace(/\b\w/g,c=>c.toUpperCase())}</option>`).join("")}</select></div>
+    <div><label class="edit-label">Sensor Count</label><input type="number" min="1" max="10" value="${af.sensorCount}" onchange="updateField('sensorCount',parseInt(this.value)||1)"></div>
+    <div><label class="edit-label">Acres</label><input type="number" min="1" value="${af.acres}" onchange="updateField('acres',parseInt(this.value)||1)"></div>
+    <div><label class="edit-label">Pump Capacity (GPM)</label><input type="number" min="100" value="${af.pumpCapacity}" onchange="updateField('pumpCapacity',parseInt(this.value)||100)"></div>
+  </div>`;
+}
+
+// ─── ACTIONS ───
+function setField(id){activeFieldId=id;showEditor=false;render();}
+function setView(v){currentView=v;render();}
+function toggleEditor(){showEditor=!showEditor;render();}
+function updateField(key,val){fields=fields.map(f=>f.id===activeFieldId?{...f,[key]:val}:f);render();}
+function addField(){
+  const newId=Math.max(...fields.map(f=>f.id))+1;
+  fields.push({id:newId,name:`Field ${newId}`,crop:"potatoes",growthStage:0,soil:"loam",irrigationType:"pivot",soilMoisture:Math.round(25+Math.random()*25),sensorCount:2,slope:"flat",pumpCapacity:600,waterRights:"8 hrs/day",energyTOU:"standard",acres:80});
+  activeFieldId=newId;showEditor=false;render();
+}
+function removeField(id){
+  if(fields.length<=1)return;
+  fields=fields.filter(f=>f.id!==id);
+  if(activeFieldId===id)activeFieldId=fields[0].id;
+  render();
+}
+
+// Init
+render();
+</script>
+</body>
+</html>
